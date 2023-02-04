@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lms.Data.Data;
 using Lms.Core.Entities;
+using Lms.Core.Repositories;
 
 namespace Lms.Api.Controllers
 {
@@ -15,7 +16,6 @@ namespace Lms.Api.Controllers
     public class TournamentsController : ControllerBase
     {
         private readonly LmsApiContext _context;
-
         public TournamentsController(LmsApiContext context)
         {
             _context = context;
@@ -29,7 +29,9 @@ namespace Lms.Api.Controllers
           {
               return NotFound();
           }
-            return await _context.Tournament.ToListAsync();
+
+            
+           return await _context.Tournament.ToListAsync();
         }
 
         // GET: api/Tournaments/5

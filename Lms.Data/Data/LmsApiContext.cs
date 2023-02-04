@@ -14,8 +14,8 @@ namespace Lms.Data.Data
         {
         }
 
-        public DbSet<Tournament> Tournament { get; set; } = default!;
+        public DbSet<Tournament> Tournament => Set<Tournament>();
 
-        public DbSet<Game> Game { get; set; } = default!;
+        public DbSet<Game> Game => Set<Game>();
     }
 }
