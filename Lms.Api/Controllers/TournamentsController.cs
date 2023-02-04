@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Lms.Data.Data;
 using Lms.Core.Entities;
 using Lms.Core.Repositories;
+using Lms.Data.Repositories.Lms.Core.Repositories;
 
 namespace Lms.Api.Controllers
 {
@@ -16,9 +17,11 @@ namespace Lms.Api.Controllers
     public class TournamentsController : ControllerBase
     {
         private readonly LmsApiContext _context;
-        public TournamentsController(LmsApiContext context)
+        private readonly UnitOfWork _uow;
+        public TournamentsController(LmsApiContext context, UnitOfWork uow)
         {
             _context = context;
+            _uow = uow;
         }
 
         // GET: api/Tournaments

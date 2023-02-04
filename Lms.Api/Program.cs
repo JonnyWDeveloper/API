@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Lms.Data.Data;
 using Lms.Api.Extensions;
+using Lms.Core.Repositories;
+using Lms.Data.Repositories.Lms.Core.Repositories;
 
 namespace Lms.Api
 {
@@ -12,7 +14,8 @@ namespace Lms.Api
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<LmsApiContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("LmsApiContext") ?? throw new InvalidOperationException("Connection string 'LmsApiContext' not found.")));
-          
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Add services to the container.
 

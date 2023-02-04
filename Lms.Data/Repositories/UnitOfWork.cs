@@ -21,11 +21,11 @@
             public ITournamentRepository TournamentRepository
             {
                 get;
-            }
+            } = default!;
             public IGameRepository GameRepository
             {
                 get;
-            }
+            } = default!;
             public async Task CompleteAsync()
             {
                 await db.SaveChangesAsync();

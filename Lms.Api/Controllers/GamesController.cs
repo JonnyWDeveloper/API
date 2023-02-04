@@ -7,18 +7,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
 using Lms.Data.Data;
+using Lms.Core.Repositories;
+using Lms.Data.Repositories.Lms.Core.Repositories;
 
 namespace Lms.Api.Controllers
-{
+{    
+
     [Route("api/[controller]")]
     [ApiController]
     public class GamesController : ControllerBase
     {
         private readonly LmsApiContext _context;
+        private readonly UnitOfWork _uow;
 
-        public GamesController(LmsApiContext context)
+        public GamesController(LmsApiContext context, UnitOfWork uow)
         {
             _context = context;
+            _uow = uow;
         }
 
         // GET: api/Games
