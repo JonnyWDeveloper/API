@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Lms.Core.Repositories;
 
-namespace Lms.Core.Repositories
+namespace Lms.Data.Repositories
 {
-    public class GameRepository
+    public class GameRepository : IGameRepository
     {
         private readonly LmsApiContext db;
 
@@ -18,22 +19,39 @@ namespace Lms.Core.Repositories
             this.db = db;
 
         }
-        // public Task<IEnumerable<Game>> GetAllAsync( return);
-
+        public Task<IEnumerable<Game>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
         public async Task<IEnumerable<Game>> GetAsync()
         {
             return await db.Game.ToListAsync();
         }
-        //public Task<Game> GetAsync(int id) { return }
-        //public Task<bool> AnyAsync(int id){ return }
+        public async Task<Game> GetAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AnyAsync(int id)
+        {
+            throw new NotImplementedException();
+
+        }
+
+
         public void Add(Game Game)
         {
+            throw new NotImplementedException();
         }
+
         public void Update(Game Game)
         {
+            throw new NotImplementedException();
         }
+
         public void Remove(Game Game)
         {
+            throw new NotImplementedException();
         }
     }
 }
