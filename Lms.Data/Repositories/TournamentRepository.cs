@@ -19,21 +19,42 @@ namespace Lms.Data.Repositories
             this.db = db;
 
         }
-        public Task<IEnumerable<Tournament>> GetAllAsync()
+        public async Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames)
         {
+            //true with Include - not working...
+            return includeGames ? await db.Tournament.ToListAsync():
+                                  await db.Tournament.ToListAsync();
+        }
+        //GetAllAsync is used instead of this method    
+        public async Task<IEnumerable<Tournament>> GetAsync(bool includeGames = false)
+        {
+
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Tournament>> GetAsync(bool includeGames = false)
+        public async Task<Tournament?> GetAsync(string title, bool includeGames = false)
         {
-            return includeGames ? await db.Tournament.Include(g => g.Games)
-                                                       .ToListAsync() :
-                                     await db.Tournament.ToListAsync();
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                throw new ArgumentException($"'{nameof(title)}' cannot be null or whitespace", nameof(title));
+            }
+
+            var query = db.Tournament
+                    .AsQueryable();
+
+            if (includeGames)
+            {
+                query = query.Include(t => t.Games);
+            }
+
+            return await query.FirstOrDefaultAsync(t => t.Title == title);
+
         }
         public Task<Tournament> GetAsync(int id)
         {
             throw new NotImplementedException();
         }
+
         public Task<bool> AnyAsync(int id)
         {
             throw new NotImplementedException();

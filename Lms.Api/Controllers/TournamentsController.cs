@@ -9,6 +9,8 @@ using Lms.Data.Data;
 using Lms.Core.Entities;
 using Lms.Core.Repositories;
 using Lms.Data.Repositories.Lms.Core.Repositories;
+using AutoMapper;
+using Lms.Core.DTOs;
 
 namespace Lms.Api.Controllers
 {
@@ -17,37 +19,58 @@ namespace Lms.Api.Controllers
     public class TournamentsController : ControllerBase
     {
         private readonly LmsApiContext _context;
-        private readonly UnitOfWork _uow;
-        public TournamentsController(LmsApiContext context, UnitOfWork uow)
+        private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
+
+        public TournamentsController(LmsApiContext context, IUnitOfWork uow, IMapper mapper)
         {
             _context = context;
             _uow = uow;
+            _mapper = mapper;
         }
 
-        // GET: api/Tournaments
+        // GET: api/Tournaments  
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tournament>>> GetTournament()
+        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament(bool includeLectures)
         {
-          if (_context.Tournament == null)
-          {
-              return NotFound();
-          }
-          
-          var result =  _uow.TournamentRepository.GetAllAsync();
+            if (_context.Tournament == null)
+            {
+                return NotFound();
+            }
 
-            return result.Result.Any() ? Ok(result) : BadRequest();  
+            var events = await _uow.TournamentRepository.GetAllAsync(includeLectures);
+            var dto = _mapper.Map<IEnumerable<TournamentDto>>(events);
+            return Ok(dto);
 
             //return await _context.Tournament.ToListAsync();
+        }
+
+        // GET: api/Tournaments/Name (unique Name, works like an id)
+        [HttpGet]
+        [Route("{name}")]
+        public async Task<ActionResult<TournamentDto>> GetCodeEvent(string name, bool includeLectures)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return BadRequest();
+
+            var tournament = await _uow.TournamentRepository.GetAsync(name, includeLectures);
+
+            if (tournament == null)
+                return NotFound();
+
+            var dto = _mapper.Map<TournamentDto>(tournament);
+
+            return Ok(dto);
         }
 
         // GET: api/Tournaments/5       
         [HttpGet("{id}")]
         public async Task<ActionResult<Tournament>> GetTournament(int id)
         {
-          if (_context.Tournament == null)
-          {
-              return NotFound();
-          }
+            if (_context.Tournament == null)
+            {
+                return NotFound();
+            }
             var tournament = await _context.Tournament.FindAsync(id);
 
             if (tournament == null)
@@ -94,14 +117,17 @@ namespace Lms.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Tournament>> PostTournament(Tournament tournament)
         {
-          if (_context.Tournament == null)
-          {
-              return Problem("Entity set 'LmsApiContext.Tournament'  is null.");
-          }
+            if (_context.Tournament == null)
+            {
+                return Problem("Entity set 'LmsApiContext.Tournament'  is null.");
+            }
             _context.Tournament.Add(tournament);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTournament", new { id = tournament.Id }, tournament);
+            return CreatedAtAction("GetTournament", new
+            {
+                id = tournament.Id
+            }, tournament);
         }
 
         // DELETE: api/Tournaments/5

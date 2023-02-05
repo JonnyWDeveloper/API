@@ -9,6 +9,7 @@ using Lms.Core.Entities;
 using Lms.Data.Data;
 using Lms.Core.Repositories;
 using Lms.Data.Repositories.Lms.Core.Repositories;
+using AutoMapper;
 
 namespace Lms.Api.Controllers
 {    
@@ -18,12 +19,15 @@ namespace Lms.Api.Controllers
     public class GamesController : ControllerBase
     {
         private readonly LmsApiContext _context;
-        private readonly UnitOfWork _uow;
+        private UnitOfWork _uow; //readonly? Not in: CodeEvents though!
+        private readonly IMapper _mapper;
 
-        public GamesController(LmsApiContext context, UnitOfWork uow)
+        public GamesController(LmsApiContext context, UnitOfWork uow, IMapper mapper)
         {
             _context = context;
             _uow = uow;
+            _mapper = mapper;
+
         }
 
         // GET: api/Games
