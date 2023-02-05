@@ -14,18 +14,22 @@
         {
 
             private readonly LmsApiContext db;
-            public UnitOfWork(LmsApiContext db)
-            {
-                this.db = db;
-            }
             public ITournamentRepository TournamentRepository
             {
                 get;
-            } = default!;
+            }
             public IGameRepository GameRepository
             {
                 get;
-            } = default!;
+            }
+            public UnitOfWork(LmsApiContext db)
+            {
+                this.db = db;
+                TournamentRepository = new TournamentRepository(db);
+                GameRepository = new GameRepository(db);
+
+            }
+            
             public async Task CompleteAsync()
             {
                 await db.SaveChangesAsync();

@@ -37,13 +37,13 @@ namespace Lms.Data.Data
 
                             Title = faker.Commerce.ProductName(),
                             Time = DateTime.UtcNow.AddDays(faker.Random.Int(-20, 20)),
-                            TournamentId = i,
+                            //TournamentId = i,
                         },
                         new Game
                         {
                             Title = faker.Commerce.ProductName(),
                             Time = DateTime.UtcNow.AddDays(faker.Random.Int(-20, 20)),
-                            TournamentId = i,
+                            //TournamentId = i,
                         }
                     }
                 });

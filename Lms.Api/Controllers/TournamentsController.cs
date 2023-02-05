@@ -32,12 +32,15 @@ namespace Lms.Api.Controllers
           {
               return NotFound();
           }
+          
+          var result =  _uow.TournamentRepository.GetAllAsync();
 
-            
-           return await _context.Tournament.ToListAsync();
+            return result.Result.Any() ? Ok(result) : BadRequest();  
+
+            //return await _context.Tournament.ToListAsync();
         }
 
-        // GET: api/Tournaments/5
+        // GET: api/Tournaments/5       
         [HttpGet("{id}")]
         public async Task<ActionResult<Tournament>> GetTournament(int id)
         {
