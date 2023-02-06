@@ -31,14 +31,14 @@ namespace Lms.Api.Controllers
 
         // GET: api/Tournaments  
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament(bool includeLectures)
+        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament(bool includeGames)
         {
             if (_context.Tournament == null)
             {
                 return NotFound();
             }
 
-            var events = await _uow.TournamentRepository.GetAllAsync(includeLectures);
+            var events = await _uow.TournamentRepository.GetAllAsync(includeGames);
             var dto = _mapper.Map<IEnumerable<TournamentDto>>(events);
             return Ok(dto);
 
@@ -48,12 +48,12 @@ namespace Lms.Api.Controllers
         // GET: api/Tournaments/Name (unique Name, works like an id)
         [HttpGet]
         [Route("{name}")]
-        public async Task<ActionResult<TournamentDto>> GetCodeEvent(string name, bool includeLectures)
+        public async Task<ActionResult<TournamentDto>> GetTournament(string name, bool includeGames)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return BadRequest();
 
-            var tournament = await _uow.TournamentRepository.GetAsync(name, includeLectures);
+            var tournament = await _uow.TournamentRepository.GetAsync(name, includeGames);
 
             if (tournament == null)
                 return NotFound();

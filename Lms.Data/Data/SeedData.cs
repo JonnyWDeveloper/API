@@ -1,8 +1,6 @@
 ﻿using Bogus;
 using Lms.Core.Entities;
-using Lms.Data.Migrations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Lms.Data.Data
 {
@@ -22,9 +20,9 @@ namespace Lms.Data.Data
 
             var faker = new Faker("sv");
             var tournaments = new List<Tournament>();
-            int i = 0;
+            int i;
 
-            for (i = 0; i < 50; i++)
+            for (i = 0; i < 5; i++)
             {
                 tournaments.Add(new Tournament
                 {

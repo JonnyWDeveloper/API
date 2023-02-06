@@ -19,10 +19,10 @@ namespace Lms.Api.Controllers
     public class GamesController : ControllerBase
     {
         private readonly LmsApiContext _context;
-        private UnitOfWork _uow; //readonly? Not in: CodeEvents though!
+        private IUnitOfWork _uow; //readonly? Not in: CodeEvents though!
         private readonly IMapper _mapper;
 
-        public GamesController(LmsApiContext context, UnitOfWork uow, IMapper mapper)
+        public GamesController(LmsApiContext context, IUnitOfWork uow, IMapper mapper)
         {
             _context = context;
             _uow = uow;

@@ -22,7 +22,7 @@ namespace Lms.Data.Repositories
         public async Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames)
         {
             //true with Include - not working...
-            return includeGames ? await db.Tournament.ToListAsync():
+            return includeGames ? await db.Tournament.Include(t => t.Games).ToListAsync() :
                                   await db.Tournament.ToListAsync();
         }
         //GetAllAsync is used instead of this method    

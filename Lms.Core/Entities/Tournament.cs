@@ -23,6 +23,9 @@ namespace Lms.Core.Entities
             get; set;
         }
 
-        public ICollection<Game> Games = new List<Game>();       
+        public ICollection<Game> Games
+        {
+            get; set;
+        }
     }
 }
