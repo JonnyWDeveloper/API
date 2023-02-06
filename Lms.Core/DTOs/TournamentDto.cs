@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lms.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,11 @@ namespace Lms.Core.DTOs
         {
             get; set;
         } = DateTime.UtcNow.AddMonths(3);
+
+        public ICollection<Game> Games
+        {
+            get; set;
+        }
 
     }
 }
