@@ -45,15 +45,15 @@ namespace Lms.Api.Controllers
             //return await _context.Tournament.ToListAsync();
         }
 
-        // GET: api/Tournaments/Name (unique Name, works like an id)
+        // GET: api/Tournaments/Title (unique Title, works like an id)
         [HttpGet]
-        [Route("{name}")]
-        public async Task<ActionResult<TournamentDto>> GetTournament(string name, bool includeGames)
+        [Route("{title}")]
+        public async Task<ActionResult<TournamentDto>> GetTournament(string title, bool includeGames)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(title))
                 return BadRequest();
 
-            var tournament = await _uow.TournamentRepository.GetAsync(name, includeGames);
+            var tournament = await _uow.TournamentRepository.GetAsync(title, includeGames);
 
             if (tournament == null)
                 return NotFound();
@@ -71,14 +71,15 @@ namespace Lms.Api.Controllers
             {
                 return NotFound();
             }
-            var tournament = await _context.Tournament.FindAsync(id);
+
+            var tournament = await _uow.TournamentRepository.GetAsync(id);
 
             if (tournament == null)
-            {
                 return NotFound();
-            }
 
-            return tournament;
+            var dto = _mapper.Map<TournamentDto>(tournament);
+
+            return Ok(dto);
         }
 
         // PUT: api/Tournaments/5
@@ -129,6 +130,25 @@ namespace Lms.Api.Controllers
                 id = tournament.Id
             }, tournament);
         }
+
+        //[HttpPost]
+        //public async Task<ActionResult<TournamentDto>> CreateTournament(CreateTournamentDto dto)
+        //{
+        //    if (await _uow.TournamentRepository.GetAsync(dto.Title) != null)
+        //    {
+        //        ModelState.AddModelError("Title", "Title exists");
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var codeEvent = _mapper.Map<Tournament>(dto);
+        //    await _uow.TournamentRepository.AddAsync(Tournament);
+        //    await _uow.CompleteAsync();
+
+        //    return CreatedAtAction(nameof(Tournament), new
+        //    {
+        //        name = Tournament.Title
+        //    }, _mapper.Map<TournamentDto>(dto));
+        //}
 
         // DELETE: api/Tournaments/5
         [HttpDelete("{id}")]

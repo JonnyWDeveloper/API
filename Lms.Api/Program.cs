@@ -30,7 +30,7 @@ namespace Lms.Api
             builder.Services.AddAutoMapper(typeof(LmsMappings));
 
             var app = builder.Build();
-
+           
             app.SeedDataAsync().GetAwaiter().GetResult();
 
             // Configure the HTTP request pipeline.

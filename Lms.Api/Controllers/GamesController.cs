@@ -10,17 +10,22 @@ using Lms.Data.Data;
 using Lms.Core.Repositories;
 using Lms.Data.Repositories.Lms.Core.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Lms.Core.DTOs;
 
 namespace Lms.Api.Controllers
-{    
+{
 
-    [Route("api/[controller]")]
+    [Route("api/tournaments/{title}/games")]
     [ApiController]
     public class GamesController : ControllerBase
     {
         private readonly LmsApiContext _context;
         private IUnitOfWork _uow; //readonly? Not in: CodeEvents though!
         private readonly IMapper _mapper;
+        private readonly ProblemDetailsFactory problemDetailsFactory;
+
+
 
         public GamesController(LmsApiContext context, IUnitOfWork uow, IMapper mapper)
         {
@@ -28,6 +33,21 @@ namespace Lms.Api.Controllers
             _uow = uow;
             _mapper = mapper;
 
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesForTournament(string title)
+        {
+            if (await _uow.TournamentRepository.GetAsync(title) is null)
+            {
+                return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                          StatusCodes.Status404NotFound,
+                                                                          title: "Tournament ´Does not exist",
+                                                                          detail: $"The Tournament {title} does not exist"));
+            }
+
+            var games = await _uow.TournamentRepository.GetAsync(title);
+            return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
         }
 
         // GET: api/Games

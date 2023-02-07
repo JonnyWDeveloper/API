@@ -26,7 +26,7 @@ namespace Lms.Data.Data
             {
                 tournaments.Add(new Tournament
                 {
-                    Title = faker.Name + " " + faker.Random.Word(),
+                    Title = faker.Random.Word(),
                     StartDate = DateTime.UtcNow.AddDays(faker.Random.Int(-20, 20)),
                     Games = new Game[]
                     {

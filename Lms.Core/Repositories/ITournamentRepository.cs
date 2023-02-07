@@ -9,9 +9,10 @@ namespace Lms.Core.Repositories
 {
     public interface ITournamentRepository
     {
-        Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames);
-        Task<Tournament> GetAsync(string name, bool includeGames);        
+        Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames = false);
         Task<Tournament> GetAsync(int id);
+        Task<Tournament> GetAsync(string title, bool includeGames = false);
+        
         Task<bool> AnyAsync(int id);
         void Add(Tournament tournament);
         void Update(Tournament tournament);
