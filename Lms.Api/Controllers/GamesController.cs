@@ -15,18 +15,31 @@ using Lms.Core.DTOs;
 
 namespace Lms.Api.Controllers
 {
-
-    [Route("api/tournaments/{title}/games")]
     [ApiController]
+    [Route("api/tournaments/{title}/games")]    
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public class GamesController : ControllerBase
     {
         private readonly LmsApiContext _context;
-        private IUnitOfWork _uow; //readonly? Not in: CodeEvents though!
+        private readonly IUnitOfWork _uow; 
         private readonly IMapper _mapper;
         private readonly ProblemDetailsFactory problemDetailsFactory;
 
 
-
+        /// <summary>
+        /// An API Controller handling the tasks resulting in showing the games
+        ///for the appropriate DTO.
+        /// </summary>
+        /// <param name="context">The database context for the two DbSets.</param>
+        /// <param name="uow">The interface IUnitOfWork calling the two repositories´methods.</param>
+        /// <param name="mapper">The AutoMapper interface: executes a mapping from the source object<br></br> 
+        /// to a new destination object with supplied mapping options.</param>
         public GamesController(LmsApiContext context, IUnitOfWork uow, IMapper mapper)
         {
             _context = context;
@@ -34,7 +47,11 @@ namespace Lms.Api.Controllers
             _mapper = mapper;
 
         }
-
+        /// <summary>
+        /// The Get method [HttpGet] for all the games belonging to a single tournament.
+        /// </summary>
+        /// <param name="title">The tournament title.</param>
+        /// <returns>A single tournament by title and its games.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesForTournament(string title)
         {
@@ -42,7 +59,7 @@ namespace Lms.Api.Controllers
             {
                 return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
                                                                           StatusCodes.Status404NotFound,
-                                                                          title: "Tournament ´Does not exist",
+                                                                          title: "Tournament does not exist",
                                                                           detail: $"The Tournament {title} does not exist"));
             }
 

@@ -12,8 +12,7 @@ namespace Lms.Api.Extensions
                 var serviceProvider = scope.ServiceProvider;
                 var db = serviceProvider.GetRequiredService<LmsApiContext>();
 
-                db.Database.EnsureDeleted();
-                db.Database.Migrate();
+               //db.Database.Migrate();
 
                 try
                 {

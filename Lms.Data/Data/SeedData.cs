@@ -27,20 +27,20 @@ namespace Lms.Data.Data
                 tournaments.Add(new Tournament
                 {
                     Title = faker.Random.Word(),
-                    StartDate = DateTime.UtcNow.AddDays(faker.Random.Int(-20, 20)),
+                    StartDate = DateTime.Now.AddDays(faker.Random.Int(-20, 20)),
                     Games = new Game[]
                     {
                         new Game
                         {
 
                             Title = faker.Commerce.ProductName(),
-                            Time = DateTime.UtcNow.AddDays(faker.Random.Int(-20, 20)),
+                            Time = DateTime.Now.AddDays(faker.Random.Int(-20, 20)),
                             //TournamentId = i,
                         },
                         new Game
                         {
                             Title = faker.Commerce.ProductName(),
-                            Time = DateTime.UtcNow.AddDays(faker.Random.Int(-20, 20)),
+                            Time = DateTime.Now.AddDays(faker.Random.Int(-20, 20)),
                             //TournamentId = i,
                         }
                     }

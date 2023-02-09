@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Lms.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Lms.Api.Controllers.GamesController.#ctor(Lms.Data.Data.LmsApiContext,Lms.Core.Repositories.IUnitOfWork,AutoMapper.IMapper)">
+             <summary>
+             An API Controller handling the tasks resulting in showing the games
+            for the appropriate DTO.
+             </summary>
+             <param name="context">The database context for the two DbSets.</param>
+             <param name="uow">The interface IUnitOfWork calling the two repositories´methods.</param>
+             <param name="mapper">The AutoMapper interface: executes a mapping from the source object<br></br> 
+             to a new destination object with supplied mapping options.</param>
+        </member>
+        <member name="M:Lms.Api.Controllers.GamesController.GetGamesForTournament(System.String)">
+            <summary>
+            The Get method [HttpGet] for all the games belonging to a single tournament.
+            </summary>
+            <param name="title">The tournament title.</param>
+            <returns>A single tournament by title and its games.</returns>
+        </member>
+    </members>
+</doc>

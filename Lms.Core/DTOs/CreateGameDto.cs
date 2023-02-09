@@ -15,6 +15,6 @@ namespace Lms.Core.DTOs
         public DateTime StartDate
         {
             get; set;
-        } = DateTime.UtcNow;
+        } = DateTime.Now;
     }
 }

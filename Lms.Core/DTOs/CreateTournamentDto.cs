@@ -17,10 +17,10 @@ namespace Lms.Core.DTOs
         public DateTime StartDate
         {
             get; set;
-        } = DateTime.UtcNow;
+        } = DateTime.Now;
         public DateTime EndDate
         {
             get; set;
-        } = DateTime.UtcNow.AddMonths(3);
+        } = DateTime.Now.AddMonths(3);
     }
 }
