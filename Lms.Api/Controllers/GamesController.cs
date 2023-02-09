@@ -24,6 +24,7 @@ namespace Lms.Api.Controllers
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Consumes("application/json", "application/xml")]
     public class GamesController : ControllerBase
     {
         private readonly LmsApiContext _context;
@@ -109,7 +110,7 @@ namespace Lms.Api.Controllers
 
         // PUT: /games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}")]        
         public async Task<IActionResult> PutGame(int id, Game game)
         {
             if (id != game.Id)

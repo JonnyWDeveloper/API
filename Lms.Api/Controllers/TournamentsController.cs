@@ -22,6 +22,7 @@ namespace Lms.Api.Controllers
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Consumes("application/json", "application/xml")]
     public class TournamentsController : ControllerBase
     {
         private readonly LmsApiContext _context;
