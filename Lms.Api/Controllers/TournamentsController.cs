@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bogus.DataSets;
 using Lms.Api.Filters;
 using Lms.Core.DTOs;
 using   Lms.Core.Entities;
@@ -60,7 +61,10 @@ namespace Lms.Api.Controllers
         public async Task<ActionResult<TournamentDto>> GetTournament(string title, bool includegames)
         {
             if (string.IsNullOrWhiteSpace(title))
-                return BadRequest();
+                return BadRequest(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                         StatusCodes.Status400BadRequest,
+                                                                         title: "Validation failed",
+                                                                         detail: $"The Validation for Tournament: {title} failed."));
 
             var tournament = await _uow.TournamentRepository.GetAsync(title, includegames);
 
@@ -157,6 +161,7 @@ namespace Lms.Api.Controllers
 
             _context.Tournament.Remove(tournament);
             await _context.SaveChangesAsync();
+            //ProducesResponseType(StatusCodes.Status500InternalServerError)
 
             return NoContent();
         }

@@ -61,7 +61,7 @@ namespace Lms.Api.Controllers
                 return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
                                                                           StatusCodes.Status404NotFound,
                                                                           title: "Tournament does not exist",
-                                                                          detail: $"The Tournament {title} does not exist"));
+                                                                          detail: $"The Tournament {title} does not exist."));
             }
 
             var games = await _uow.GameRepository.GetAllAsync(title); //Get Games
@@ -78,13 +78,16 @@ namespace Lms.Api.Controllers
                 return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
                                                                           StatusCodes.Status404NotFound,
                                                                           title: "Tournament ´Does not exist",
-                                                                          detail: $"The Tournament {title} does not exist"));
+                                                                          detail: $"The Tournament {title} does not exist."));
             }
 
             var game = await _uow.GameRepository.GetAsync(title, id);
 
             if (game == null)
-                return NotFound();
+                return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                           StatusCodes.Status404NotFound,
+                                                                           title: "The Game Does not exist",
+                                                                           detail: $"The Game with Id: {id} does not exist."));
 
             return Ok(_mapper.Map<GameDto>(game));
         }
@@ -115,7 +118,10 @@ namespace Lms.Api.Controllers
         {
             if (id != game.Id)
             {
-                return BadRequest();
+                return BadRequest(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                         StatusCodes.Status400BadRequest,
+                                                                         title: "Validation failed",
+                                                                         detail: $"The Validation for Id: {id} and {game} failed."));
             }
 
             _context.Entry(game).State = EntityState.Modified;
@@ -123,12 +129,16 @@ namespace Lms.Api.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                //ProducesResponseType(StatusCodes.Status500InternalServerError)
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!GameExists(id))
                 {
-                    return NotFound();
+                    return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                          StatusCodes.Status404NotFound,
+                                                                          title: "The Game does not exist",
+                                                                          detail: $"The Game with Id: {id} does not exist."));
                 }
                 else
                 {
@@ -151,7 +161,7 @@ namespace Lms.Api.Controllers
                 return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
                                                                           StatusCodes.Status404NotFound,
                                                                           title: "Tournament does not exist",
-                                                                          detail: $"The Tournament {title} doesent exist"));
+                                                                          detail: $"The Tournament {title} does not exist."));
             }
 
             var game = _mapper.Map<Game>(dto);
@@ -177,12 +187,18 @@ namespace Lms.Api.Controllers
         {
             if (_context.Game == null)
             {
-                return NotFound();
+                return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                          StatusCodes.Status404NotFound,
+                                                                          title: "The Game does not exist",
+                                                                          detail: $"The Game with Id: {id} does not exist."));
             }
             var game = await _context.Game.FindAsync(id);
             if (game == null)
             {
-                return NotFound();
+                return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                          StatusCodes.Status404NotFound,
+                                                                          title: "The Game does not exist",
+                                                                          detail: $"The Game with Id: {id} does not exist."));
             }
 
             _context.Game.Remove(game);
