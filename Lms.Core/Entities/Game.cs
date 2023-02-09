@@ -1,4 +1,6 @@
-﻿namespace Lms.Core.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Lms.Core.Entities
 {
     public class Game
     {
@@ -6,7 +8,8 @@
         {
             get; set;
         }
-
+        [Required]
+        [MaxLength(30)]
         public string Title
         {
             get; set;
