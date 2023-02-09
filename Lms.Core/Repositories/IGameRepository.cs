@@ -10,11 +10,16 @@ namespace Lms.Core.Repositories
 {
     public interface IGameRepository
     {
-        Task<IEnumerable<Game>> GetAllAsync();
-        Task<Game> GetAsync(int id);
-        Task<bool> AnyAsync(int id);
-        void Add(Game Game);
-        void Update(Game Game);
-        void Remove(Game Game);
+
+        Task<IEnumerable<Game>> GetAllAsync(string title);  
+        Task<Game?> GetAsync(string title, int id);
+        Task AddAsync(Game game);
+    
+
+        //Task<bool> AnyAsync(int id); 
+        //void Remove(Game Game);
+        //Task AddAsync(Game game);
+        //void Add(Game Game);
+        //void Update(Game Game);
     }
 }

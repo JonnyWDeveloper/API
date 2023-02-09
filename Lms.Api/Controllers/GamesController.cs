@@ -38,6 +38,23 @@ namespace Lms.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesForTournament(string title)
         {
+            if (await _uow.TournamentRepository.GetAsync(title) is null) //Get Single Tournament
+            {
+                return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                          StatusCodes.Status404NotFound,
+                                                                          title: "Tournament ´Does not exist",
+                                                                          detail: $"The Tournament {title} does not exist"));
+            }
+
+            var games = await _uow.GameRepository.GetAllAsync(title); //Get Games
+            return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
+        }
+
+        // GET: /games/id
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame(string title, int id)
+        {
             if (await _uow.TournamentRepository.GetAsync(title) is null)
             {
                 return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
@@ -46,40 +63,34 @@ namespace Lms.Api.Controllers
                                                                           detail: $"The Tournament {title} does not exist"));
             }
 
-            var games = await _uow.TournamentRepository.GetAsync(title);
-            return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
-        }
-
-        // GET: api/Games
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Game>>> GetGame()
-        {
-          if (_context.Game == null)
-          {
-              return NotFound();
-          }
-            return await _context.Game.ToListAsync();
-        }
-
-        // GET: api/Games/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Game>> GetGame(int id)
-        {
-          if (_context.Game == null)
-          {
-              return NotFound();
-          }
-            var game = await _context.Game.FindAsync(id);
+            var game = await _uow.GameRepository.GetAsync(title, id);
 
             if (game == null)
-            {
                 return NotFound();
-            }
 
-            return game;
+            return Ok(_mapper.Map<GameDto>(game));
         }
 
-        // PUT: api/Games/5
+        // GET: /games/5
+        //[HttpGet]
+        //[Route("{id}")]
+        //public async Task<ActionResult<Game>> GetGame(int id)
+        //{
+        //  if (_context.Game == null)
+        //  {
+        //      return NotFound();
+        //  }
+        //    var game = await _context.Game.FindAsync(id);
+
+        //    if (game == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return game;
+        //}
+
+        // PUT: /games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGame(int id, Game game)
@@ -110,19 +121,36 @@ namespace Lms.Api.Controllers
             return NoContent();
         }
 
-        // POST: api/Games
+        // POST: /Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Game>> PostGame(Game game)
+        public async Task<ActionResult<GameDto>> CreateLecture(string title, CreateGameDto dto)
         {
-          if (_context.Game == null)
-          {
-              return Problem("Entity set 'LmsApiContext.Game'  is null.");
-          }
-            _context.Game.Add(game);
-            await _context.SaveChangesAsync();
+            var tournament = await _uow.TournamentRepository.GetAsync(title);
 
-            return CreatedAtAction("GetGame", new { id = game.Id }, game);
+            if (tournament is null)
+            {
+                return NotFound(problemDetailsFactory.CreateProblemDetails(HttpContext,
+                                                                          StatusCodes.Status404NotFound,
+                                                                          title: "Tournament does not exist",
+                                                                          detail: $"The Tournament {title} doesent exist"));
+            }
+
+            var game = _mapper.Map<Game>(dto);
+            game.Tournament = tournament;
+            await _uow.GameRepository.AddAsync(game);
+            await _uow.CompleteAsync();
+
+            var created = _mapper.Map<GameDto>(game);
+
+            return CreatedAtAction(nameof(GetGame), new
+            {
+                title = tournament.Title,
+                id = created.Id
+            }, created);
+
+
+
         }
 
         // DELETE: api/Games/5

@@ -4,29 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lms.Core.Entities
+namespace Lms.Core.DTOs
 {
-#nullable disable
-    public class Tournament
+    public class CreateGameDto
     {
-        public int Id
-        {
-            get; set;
-        }
-
         public string Title
         {
             get; set;
         }
-
         public DateTime StartDate
         {
             get; set;
-        }
-
-        public ICollection<Game> Games
-        {
-            get; set;
-        }
+        } = DateTime.UtcNow;
     }
 }

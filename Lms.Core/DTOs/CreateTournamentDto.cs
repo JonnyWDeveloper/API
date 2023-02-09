@@ -1,19 +1,14 @@
-﻿using System;
+﻿using Lms.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lms.Core.Entities
+namespace Lms.Core.DTOs
 {
-#nullable disable
-    public class Tournament
+    public class CreateTournamentDto
     {
-        public int Id
-        {
-            get; set;
-        }
-
         public string Title
         {
             get; set;
@@ -22,11 +17,10 @@ namespace Lms.Core.Entities
         public DateTime StartDate
         {
             get; set;
-        }
-
-        public ICollection<Game> Games
+        } = DateTime.UtcNow;
+        public DateTime EndDate
         {
             get; set;
-        }
+        } = DateTime.UtcNow.AddMonths(3);
     }
 }

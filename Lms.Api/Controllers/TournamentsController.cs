@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Lms.Data.Data;
-using Lms.Core.Entities;
-using Lms.Core.Repositories;
-using Lms.Data.Repositories.Lms.Core.Repositories;
-using AutoMapper;
+﻿using AutoMapper;
 using Lms.Core.DTOs;
+using   Lms.Core.Entities;
+using Lms.Core.Repositories;
+using Lms.Data.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lms.Api.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")] Not liked by belgian MVP E-learning teacher.    
     [ApiController]
+    [Route("api/tournaments")]
     public class TournamentsController : ControllerBase
     {
         private readonly LmsApiContext _context;
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly ProblemDetailsFactory problemDetailsFactory;
 
         public TournamentsController(LmsApiContext context, IUnitOfWork uow, IMapper mapper)
         {
@@ -31,14 +28,14 @@ namespace Lms.Api.Controllers
 
         // GET: api/Tournaments  
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament(bool includeGames)
+        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament(bool includegames)
         {
             if (_context.Tournament == null)
             {
                 return NotFound();
             }
 
-            var events = await _uow.TournamentRepository.GetAllAsync(includeGames);
+            var events = await _uow.TournamentRepository.GetAllAsync(includegames);
             var dto = _mapper.Map<IEnumerable<TournamentDto>>(events);
             return Ok(dto);
 
@@ -48,12 +45,12 @@ namespace Lms.Api.Controllers
         // GET: api/Tournaments/Title (unique Title, works like an id)
         [HttpGet]
         [Route("{title}")]
-        public async Task<ActionResult<TournamentDto>> GetTournament(string title, bool includeGames)
+        public async Task<ActionResult<TournamentDto>> GetTournament(string title, bool includegames)
         {
             if (string.IsNullOrWhiteSpace(title))
                 return BadRequest();
 
-            var tournament = await _uow.TournamentRepository.GetAsync(title, includeGames);
+            var tournament = await _uow.TournamentRepository.GetAsync(title, includegames);
 
             if (tournament == null)
                 return NotFound();
@@ -64,23 +61,23 @@ namespace Lms.Api.Controllers
         }
 
         // GET: api/Tournaments/5       
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Tournament>> GetTournament(int id)
-        {
-            if (_context.Tournament == null)
-            {
-                return NotFound();
-            }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Tournament>> GetTournament(int id)
+        //{
+        //    if (_context.Tournament == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var tournament = await _uow.TournamentRepository.GetAsync(id);
+        //    var tournament = await _uow.TournamentRepository.GetAsync(id);
 
-            if (tournament == null)
-                return NotFound();
+        //    if (tournament == null)
+        //        return NotFound();
 
-            var dto = _mapper.Map<TournamentDto>(tournament);
+        //    var dto = _mapper.Map<TournamentDto>(tournament);
 
-            return Ok(dto);
-        }
+        //    return Ok(dto);
+        //}
 
         // PUT: api/Tournaments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

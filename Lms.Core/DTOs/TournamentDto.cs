@@ -23,7 +23,7 @@ namespace Lms.Core.DTOs
             get; set;
         } = DateTime.UtcNow.AddMonths(3);
 
-        public ICollection<Game> Games
+        public ICollection<GameDto> Games
         {
             get; set;
         }

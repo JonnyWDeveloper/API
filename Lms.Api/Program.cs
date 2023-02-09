@@ -44,7 +44,6 @@ namespace Lms.Api
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();

@@ -15,6 +15,9 @@ namespace Lms.Data.Data
         {
             CreateMap<Tournament, TournamentDto>().ReverseMap();
             CreateMap<Game, GameDto>().ReverseMap();
+            CreateMap<Tournament, CreateTournamentDto>().ReverseMap();
+            CreateMap<CreateTournamentDto, TournamentDto>().ReverseMap();
+            CreateMap<CreateGameDto, Game>().ReverseMap();
         }
     }
 }

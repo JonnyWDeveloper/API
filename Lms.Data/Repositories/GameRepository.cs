@@ -1,12 +1,7 @@
 ﻿using Lms.Core.Entities;
-using Lms.Data.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Lms.Core.Repositories;
+using Lms.Data.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lms.Data.Repositories
 {
@@ -19,39 +14,59 @@ namespace Lms.Data.Repositories
             this.db = db;
 
         }
-        public Task<IEnumerable<Game>> GetAllAsync()
+        //Get ALL Games by Title
+        public async Task<IEnumerable<Game>> GetAllAsync(string title)
         {
-            throw new NotImplementedException();
-        }
-        public async Task<IEnumerable<Game>> GetAsync()
-        {
-            return await db.Game.ToListAsync();
-        }
-        public async Task<Game> GetAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                throw new ArgumentException($"'{nameof(title)}' cannot be null or whitespace.", nameof(title));
+            }
 
-        public Task<bool> AnyAsync(int id)
-        {
-            throw new NotImplementedException();
-
+            return await db.Game.Where(g => g.Tournament.Title == title).ToListAsync();
         }
 
 
-        public void Add(Game Game)
+        //Get a SINGLE Game by Tournament.Title and Game.Id
+        public async Task<Game?> GetAsync(string title, int id)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                throw new ArgumentException($"'{nameof(title)}' cannot be null or whitespace.", nameof(title));
+            }
+
+            return await db.Game.Where(g => g.Tournament.Title == title)
+                                  .FirstOrDefaultAsync(g => g.Id == id);
         }
 
-        public void Update(Game Game)
+        public async Task AddAsync(Game game)
         {
-            throw new NotImplementedException();
+            if (game is null)
+            {
+                throw new ArgumentNullException(nameof(game));
+            }
+
+            await db.Game.AddAsync(game);
         }
 
-        public void Remove(Game Game)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<bool> AnyAsync(int id)
+        //{
+        //    return await db.Game.AnyAsync(g => g.Id == id);
+
+        //}
+
+        //public void Add(Game Game)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Update(Game Game)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Remove(Game Game)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

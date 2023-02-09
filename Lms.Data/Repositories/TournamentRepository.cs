@@ -16,14 +16,14 @@ namespace Lms.Data.Repositories
             this.db = db;
 
         }
-        public async Task<IEnumerable<Tournament>> GetAllAsync(bool includeGames)
+        public async Task<IEnumerable<Tournament>> GetAllAsync(bool includegames)
         {
             //true with Include - not working...
-            return includeGames ? await db.Tournament.Include(t => t.Games).ToListAsync() :
+            return includegames ? await db.Tournament.Include(t => t.Games).ToListAsync() :
                                   await db.Tournament.ToListAsync();
         }
         //GetAllAsync is used instead of this method    
-        public async Task<IEnumerable<Tournament>> GetAsync(bool includeGames = false)
+        public async Task<IEnumerable<Tournament>> GetAsync(bool includegames = false)
         {
 
             throw new NotImplementedException();
@@ -38,7 +38,7 @@ namespace Lms.Data.Repositories
 
         }
 
-        public async Task<Tournament?> GetAsync(string title, bool includeGames = false)
+        public async Task<Tournament?> GetAsync(string title, bool includegames = false)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
@@ -48,7 +48,7 @@ namespace Lms.Data.Repositories
             var query = db.Tournament
                     .AsQueryable();
 
-            if (includeGames)
+            if (includegames)
             {
                 query = query.Include(t => t.Games);
             }
@@ -56,12 +56,23 @@ namespace Lms.Data.Repositories
             return await query.FirstOrDefaultAsync(t => t.Title == title);
 
         }
-       
+
 
         public Task<bool> AnyAsync(int id)
         {
             throw new NotImplementedException();
         }
+
+        public async Task AddAsync(Tournament tournament)
+        {
+            if (tournament is null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
+            await db.AddAsync(tournament);
+        }
+
         public void Add(Tournament tournament)
         {
             throw new NotImplementedException();
@@ -74,5 +85,10 @@ namespace Lms.Data.Repositories
         {
             throw new NotImplementedException();
         }
+
+
+
+
+
     }
 }

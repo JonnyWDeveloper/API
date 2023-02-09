@@ -10,7 +10,7 @@
         public string Title
         {
             get; set;
-        }
+        } = string.Empty;
 
         public DateTime Time
         {
@@ -20,5 +20,9 @@
         {
             get; set;
         }
+        public Tournament Tournament
+        {
+            get; set;
+        }   
     }
 }
