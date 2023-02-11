@@ -23,6 +23,7 @@ namespace Lms.Api.Controllers
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Produces("application/json", "application/xml")]
     [Consumes("application/json", "application/xml")]
     public class TournamentsController : ControllerBase
     {
@@ -98,7 +99,7 @@ namespace Lms.Api.Controllers
                 name = tournament.Title
             }, _mapper.Map<TournamentDto>(dto));
         }
-       
+
         [HttpPut("{title}")]
         public async Task<ActionResult<TournamentDto>> PutTournament(string title, TournamentDto dto)
         {
@@ -186,9 +187,9 @@ namespace Lms.Api.Controllers
         //    return Ok(dto);
         //}
 
-        // PUT: api/Tournaments/5
+        //PUT: api/Tournaments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")] - SCAFFOLDED
+        //[HttpPut("{id}")] //- SCAFFOLDED
         //public async Task<IActionResult> PutTournament(int id, Tournament tournament)
         //{
         //    if (id != tournament.Id)

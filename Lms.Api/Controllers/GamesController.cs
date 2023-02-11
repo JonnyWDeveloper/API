@@ -24,6 +24,7 @@ namespace Lms.Api.Controllers
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Produces("application/json", "application/xml")]
     [Consumes("application/json", "application/xml")]
     public class GamesController : ControllerBase
     {
@@ -152,7 +153,7 @@ namespace Lms.Api.Controllers
         // POST: /Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<GameDto>> CreateLecture(string title, CreateGameDto dto)
+        public async Task<ActionResult<GameDto>> CreateGame(string title, CreateGameDto dto)
         {
             var tournament = await _uow.TournamentRepository.GetAsync(title);
 
